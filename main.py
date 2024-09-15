@@ -53,6 +53,7 @@ fib(5)
 r2 = r7 # reg2 <- in
 r7 = r2 # out <- reg2
 
+# exit    
 while(0 != 1):
     pass
 
@@ -115,7 +116,7 @@ class PrintNodeVisitor(ast.NodeVisitor):
             if len(node.test.ops) == 1 and isinstance(node.test.ops[0], ast.NotEq):
                 self.visit(node.test.left)
                 self.visit(node.test.comparators[0])
-                print("OP_JEQ")
+                print("OP_JEQ ", end="")
         else:
             print("UNSUPPORTED IF")
         print(elselabel) # jump label
@@ -135,19 +136,19 @@ class PrintNodeVisitor(ast.NodeVisitor):
         self.label += 1
         endlabel = ".L" + str(self.label)
         self.label += 1
+        print(".label " + startlabel)
         if isinstance(node.test, ast.Compare):
             if len(node.test.ops) == 1 and isinstance(node.test.ops[0], ast.NotEq):
                 self.visit(node.test.left)
                 self.visit(node.test.comparators[0])
-                print("OP_JEQ")
+                print("OP_JEQ ", end="")
         else:
             print("UNSUPPORTED While 2")
         print(endlabel) # jump label
         for stmt in node.body:
             self.visit(stmt)
-        print("OP_JMP")
-        print(startlabel)
-        print(".label " +  endlabel)
+        print("OP_JMP " + startlabel)
+        print(".label " + endlabel)
         return node
     
     def visit_Call(self, node: ast.Call) -> ast.Call:
@@ -159,8 +160,7 @@ class PrintNodeVisitor(ast.NodeVisitor):
         for arg in node.args:
                self.visit(arg)
         name = node.func.id
-        print("OP_CALL")
-        print(".L_"+name)
+        print("OP_CALL .L_" + name)
         print("op_save_top_to_r1")
         print("op_popa")
         print("op_push_r1")
@@ -196,6 +196,10 @@ class PrintNodeVisitor(ast.NodeVisitor):
             print("UNSUPPORTED Assign 3")
         self.visit(node.value)
         print("OP_POP" + target.id[-1])
+        return node
+    
+    def visit_Pass(self, node: ast.Pass) -> ast.Pass:
+        print("OP_NOP")
         return node
 PrintNodeVisitor().visit(exp)
 

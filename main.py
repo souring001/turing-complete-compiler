@@ -64,7 +64,37 @@ while(r5 != 32):
     r5 = r5 + 1
 """
 
-exp = ast.parse(read32, mode="exec")
+test_r = """
+r5 = r5 - 1
+"""
+
+sort_py = """
+r5 = 0
+while(r5 != 15):
+    RAM[r5] = r7
+    r5 = r5 + 1
+
+r4 = 0
+while(r4 != 13):
+    r5 = r4
+    while(r5 != 13):
+        r2 = RAM[r5]
+        r5 = r5 + 1
+        r3 = RAM[r5]
+        if r3 < r2:
+            RAM[r5] = r2
+            r5 = r5 - 1
+            RAM[r5] = r3
+            r5 = r5 + 1
+    r4 = r4 + 1
+
+r5 = 0
+while(r5 != 15):
+    r7 = RAM[r5]
+    r5 = r5 + 1
+"""
+
+exp = ast.parse(sort_py, mode="exec")
 
 class PrintNodeVisitor(ast.NodeVisitor):
     def __init__(self) -> None:
@@ -131,6 +161,10 @@ class PrintNodeVisitor(ast.NodeVisitor):
                 self.visit(node.test.left)
                 self.visit(node.test.comparators[0])
                 print("OP_JEQ ", end="")
+            elif len(node.test.ops) == 1 and isinstance(node.test.ops[0], ast.Lt):
+                self.visit(node.test.left)
+                self.visit(node.test.comparators[0])
+                print("OP_JGE ", end="")
         else:
             print("UNSUPPORTED IF")
         print(elselabel) # jump label
@@ -252,7 +286,7 @@ while(ip < len(PMEM) and PMEM[ip] != OP_HLT):
     elif op == OP_SUB:
         op1 = pop()
         op2 = pop()
-        push(op1 + op2)
+        push(op1 - op2)
     elif op == OP_AND:
         op1 = pop()
         op2 = pop()

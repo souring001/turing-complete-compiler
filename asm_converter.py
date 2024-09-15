@@ -44,6 +44,11 @@ for command in commands:
         print('pop 0 0 r0')
         print('pop 0 0 r1')
         print(f'jeq r1 r0 {command[1]}')
+    elif command[0] == 'OP_JGE':
+        print('# jge')
+        print('pop 0 0 r0')
+        print('pop 0 0 r1')
+        print(f'jge r1 r0 {command[1]}')
     elif command[0] == 'OP_CALL':
         print('# call')
         print(f'mov {command[1]} 0 cnt')

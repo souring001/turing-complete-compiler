@@ -49,7 +49,7 @@ PMEM = [
 ]
 
 exp = ast.parse("""
-def fib(n):
+def fib(r2):
     if r2 != 0:
         if r2 != 1:
             return fib(r2 - 1) + fib(r2 - 2)
@@ -161,6 +161,10 @@ class PrintNodeVisitor(ast.NodeVisitor):
     
     def visit_FunctionDef(self, node: ast.FunctionDef) -> ast.FunctionDef:
         print(".L_"+node.name)
+        for i in range(len(node.args.args)):
+            rsize = len(node.args.args) + 1
+            print("OP_POP"+str(rsize - i))
+
         for stmt in node.body:
             self.visit(stmt)
         return node

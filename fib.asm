@@ -65,6 +65,7 @@ OP_POP3
 OP_POP2
 OP_PUSH1
 OP_ADD
+OP_SWAP
 OP_RET
 OP_JMP .L5
 .label .L6
@@ -73,4 +74,5 @@ OP_JMP .L3
 .label .L4
 .label .L3
 OP_PUSH 1
+OP_SWAP
 OP_RET

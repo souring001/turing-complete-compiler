@@ -193,6 +193,7 @@ class PrintNodeVisitor(ast.NodeVisitor):
             self.visit(node.value)
         else:
             print("OP_PUSH 0") # dummy
+        print("OP_SWAP")
         print("OP_RET")
         return node
     

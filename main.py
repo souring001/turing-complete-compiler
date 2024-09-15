@@ -199,6 +199,7 @@ class PrintNodeVisitor(ast.NodeVisitor):
         return node
 PrintNodeVisitor().visit(exp)
 
+PMEM = []
 while(ip < len(PMEM) and PMEM[ip] != OP_HLT):
     op = PMEM[ip]
     if op == OP_NOP:

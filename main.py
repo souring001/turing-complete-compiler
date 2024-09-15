@@ -31,16 +31,10 @@ OP_HLT = 0xFF
 
 def push(n):
     global STACK
-    # global sp
-    # STACK[sp] = n
-    # sp += 1
     STACK.append(n)
 
 def pop():
     global STACK
-    # global sp
-    # sp -= 1
-    # return STACK[sp]
     return STACK.pop()
 
 PMEM = [
@@ -54,29 +48,6 @@ PMEM = [
     OP_OUT,
 ]
 
-# exp = ast.parse("""
-# def f(a,b,c):
-#     r4 = r5 + r2
-#     return r3
-# 1 + 2 - 3 & 4
-# if 1 != 0:
-#     r2 + r3
-#     5 + 6
-# else:
-#     3 - 4
-# while(7 != 8):
-#     if(9 != 10):
-#         11 & 12
-#         13 + 14
-#     elif 15 != 16:
-#         17 + 18
-#     else:
-#         19 - 20
-# 100 + 200
-# return
-# r2 = r3 + 15
-# r3 = 20 + f(21,22,23) + 24
-# """, mode="exec")
 exp = ast.parse("""
 def fib(n):
     if r2 != 0:
@@ -84,17 +55,15 @@ def fib(n):
             return fib(r2 - 1) + fib(r2 - 2)
     return 1
 """, mode="exec")
+
 class PrintNodeVisitor(ast.NodeVisitor):
     def __init__(self) -> None:
         self.label = 0
         super().__init__()
 
     def visit(self, node):
-        # print("node")
         # print(node)
-        # print("visit")
         super().visit(node)
-        # print("end")
         return node
     
     def visit_Expr(self, node: ast.Expr) -> ast.Expr:
@@ -103,11 +72,8 @@ class PrintNodeVisitor(ast.NodeVisitor):
         return node
     
     def visit_BinOp(self, node: ast.BinOp) -> ast.BinOp:
-        # print("lhs")
         self.visit(node.left)
-        # print("rhs")
         self.visit(node.right)
-        # print("op")
         super().visit(node.op)
         return node
     
@@ -129,7 +95,7 @@ class PrintNodeVisitor(ast.NodeVisitor):
     
     def visit_Name(self, node: ast.Name) -> ast.Name:
         if node.id not in ["r2", "r3", "r4", "r5"]:
-            print("UNSUPPORTED")
+            print("UNSUPPORTED Name")
         print("OP_PUSH" + node.id[-1])
         return node
 
@@ -144,7 +110,7 @@ class PrintNodeVisitor(ast.NodeVisitor):
                 self.visit(node.test.comparators[0])
                 print("OP_JEQ")
         else:
-            print("UNSUPPORTED")
+            print("UNSUPPORTED IF")
         print(elselabel) # jump label
         for stmt in node.body:
             self.visit(stmt)
@@ -157,7 +123,7 @@ class PrintNodeVisitor(ast.NodeVisitor):
 
     def visit_While(self, node: ast.While) -> ast.While:
         if len(node.orelse) > 0:
-            print("UNSUPPORTED")
+            print("UNSUPPORTED While 1")
         startlabel = ".L" + str(self.label)
         self.label += 1
         endlabel = ".L" + str(self.label)
@@ -168,7 +134,7 @@ class PrintNodeVisitor(ast.NodeVisitor):
                 self.visit(node.test.comparators[0])
                 print("OP_JEQ")
         else:
-            print("UNSUPPORTED")
+            print("UNSUPPORTED While 2")
         print(endlabel) # jump label
         for stmt in node.body:
             self.visit(stmt)
@@ -179,7 +145,7 @@ class PrintNodeVisitor(ast.NodeVisitor):
     
     def visit_Call(self, node: ast.Call) -> ast.Call:
         if not isinstance(node.func, ast.Name):
-            print("UNSUPPORTED")
+            print("UNSUPPORTED Call")
         
         print("op_pusha")
         print("op_push_ret_addr")
@@ -209,12 +175,12 @@ class PrintNodeVisitor(ast.NodeVisitor):
     
     def visit_Assign(self, node: ast.Assign) -> ast.Assign:
         if len(node.targets) > 1:
-            print("UNSUPPORTED")
+            print("UNSUPPORTED Assign 1")
         target = node.targets[0]
         if not isinstance(target, ast.Name):
-            print("UNSUPPORTED")
+            print("UNSUPPORTED Assign 2")
         if target.id not in ["r2", "r3", "r4", "r5"]:
-            print("UNSUPPORTED")
+            print("UNSUPPORTED Assign 3")
         self.visit(node.value)
         print("OP_POP" + target.id[-1])
         return node

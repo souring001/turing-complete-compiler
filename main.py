@@ -161,8 +161,10 @@ class PrintNodeVisitor(ast.NodeVisitor):
     
     def visit_FunctionDef(self, node: ast.FunctionDef) -> ast.FunctionDef:
         print(".L_"+node.name)
-        for i in range(len(node.args.args)):
-            rsize = len(node.args.args) + 1
+        rsize = len(node.args.args) + 1
+        for i, arg in enumerate(node.args.args):
+            if arg.arg != "r" + str(i + 2):
+                print("UNSUPPORTED Arguments: should be r" + str(i + 2))
             print("OP_POP"+str(rsize - i))
 
         for stmt in node.body:

@@ -76,6 +76,36 @@ def dst_match_addi_filter(commands):
         i += 1
     return new_commands
 
+def push_mov_filter(commands):
+    # push r4 0 0
+    # mov 1 0 r0
+    # ->
+    # mov 1 0 r0
+    # push r4 0 0
+    new_commands = []
+
+    i = 0
+    while i < len(commands):
+        command = commands[i]
+        
+        if i == len(commands) - 1:
+            new_commands.append(command)
+            break
+        
+        opecode = command[0]
+        if opecode in ['push']:
+            next_command = commands[i+1]
+            if next_command[0] == 'mov' and next_command[3] != command[1] and (command[1] != 'cnt' or next_command[3] != 'cnt'):
+                new_commands.append(next_command)
+                new_commands.append(command)
+                i += 2
+                continue
+        
+        new_commands.append(command)
+        i += 1
+    return new_commands
+
+
 def lists_match(l1, l2):
     if len(l1) != len(l2):
         return False
@@ -88,7 +118,8 @@ def match_commands(old_commands, new_commands):
     for x, y in zip(old_commands, new_commands):
         return lists_match(x, y)
 
-filters = [push_pop_filter, nop_filter, dst_match_addi_filter]
+filters = [push_pop_filter, nop_filter, dst_match_addi_filter, push_mov_filter]
+# filters = [push_pop_filter, nop_filter, dst_match_addi_filter]
 
 old_commands = comment_filter(commands)
 new_commands = []

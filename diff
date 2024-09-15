@@ -1,0 +1,156 @@
+# push 0
+mov 0 0 r0
+push r0 0 0
+pop 0 0 r5
+label .L0
+push r5 0 0
+# push 15
+mov 15 0 r0
+push r0 0 0
+# jeq
+pop 0 0 r0
+pop 0 0 r1
+jeq r1 r0 .L1
+push r7 0 0
+# store
+pop 0 0 r0
+store r0 0 0
+push r5 0 0
+# push 1
+mov 1 0 r0
+push r0 0 0
+# add
+pop 0 0 r0
+pop 0 0 r1
+add r1 r0 r1
+push r1 0 0
+pop 0 0 r5
+# jmp
+mov .L0 0 cnt
+label .L1
+# push 0
+mov 0 0 r0
+push r0 0 0
+pop 0 0 r4
+label .L2
+push r4 0 0
+# push 13
+mov 13 0 r0
+push r0 0 0
+# jeq
+pop 0 0 r0
+pop 0 0 r1
+jeq r1 r0 .L3
+push r4 0 0
+pop 0 0 r5
+label .L4
+push r5 0 0
+# push 13
+mov 13 0 r0
+push r0 0 0
+# jeq
+pop 0 0 r0
+pop 0 0 r1
+jeq r1 r0 .L5
+# load
+load 0 0 r0
+push r0 0 0
+pop 0 0 r2
+push r5 0 0
+# push 1
+mov 1 0 r0
+push r0 0 0
+# add
+pop 0 0 r0
+pop 0 0 r1
+add r1 r0 r1
+push r1 0 0
+pop 0 0 r5
+# load
+load 0 0 r0
+push r0 0 0
+pop 0 0 r3
+push r3 0 0
+push r2 0 0
+# jge
+pop 0 0 r0
+pop 0 0 r1
+jge r1 r0 .L7
+push r2 0 0
+# store
+pop 0 0 r0
+store r0 0 0
+push r5 0 0
+# push 1
+mov 1 0 r0
+push r0 0 0
+# sub
+pop 0 0 r0
+pop 0 0 r1
+sub r1 r0 r1
+push r1 0 0
+pop 0 0 r5
+push r3 0 0
+# store
+pop 0 0 r0
+store r0 0 0
+push r5 0 0
+# push 1
+mov 1 0 r0
+push r0 0 0
+# add
+pop 0 0 r0
+pop 0 0 r1
+add r1 r0 r1
+push r1 0 0
+pop 0 0 r5
+# jmp
+mov .L6 0 cnt
+label .L7
+label .L6
+# jmp
+mov .L4 0 cnt
+label .L5
+push r4 0 0
+# push 1
+mov 1 0 r0
+push r0 0 0
+# add
+pop 0 0 r0
+pop 0 0 r1
+add r1 r0 r1
+push r1 0 0
+pop 0 0 r4
+# jmp
+mov .L2 0 cnt
+label .L3
+# push 0
+mov 0 0 r0
+push r0 0 0
+pop 0 0 r5
+label .L8
+push r5 0 0
+# push 15
+mov 15 0 r0
+push r0 0 0
+# jeq
+pop 0 0 r0
+pop 0 0 r1
+jeq r1 r0 .L9
+# load
+load 0 0 r0
+push r0 0 0
+pop 0 0 r7
+push r5 0 0
+# push 1
+mov 1 0 r0
+push r0 0 0
+# add
+pop 0 0 r0
+pop 0 0 r1
+add r1 r0 r1
+push r1 0 0
+pop 0 0 r5
+# jmp
+mov .L8 0 cnt
+label .L9

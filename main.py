@@ -49,13 +49,7 @@ PMEM = [
 ]
 
 exp = ast.parse("""
-fib(5)
-r2 = r7 # reg2 <- in
-r7 = r2 # out <- reg2
-
-# exit    
-while(0 != 1):
-    pass
+r7 = fib(9)
 
 def fib(r2):
     if r2 != 0:

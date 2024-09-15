@@ -94,7 +94,7 @@ def src_match_addi_filter(commands):
         opecode = command[0]
         if opecode == 'addi':
             next_command = commands[i+1]
-            if next_command[0] in ['add', 'addi', 'sub', 'subi2', 'and', 'store', 'push'] and (next_command[1] == command[3] or next_command[2] == command[3]):
+            if next_command[0] in ['add', 'addi', 'sub', 'subi2', 'and', 'store', 'push', 'jeq', 'jge'] and (next_command[1] == command[3] or next_command[2] == command[3]):
                 src1 = next_command[1]
                 src2 = next_command[2]
                 if next_command[1] == command[3]:

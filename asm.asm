@@ -1,7 +1,3 @@
-push r2 0 0
-push r3 0 0
-push r4 0 0
-push r5 0 0
 # push .L0
 mov .L0 0 r0
 push r0 0 0
@@ -12,22 +8,15 @@ push r0 0 0
 mov .L_fib 0 cnt
 label .L0
 pop 0 0 r1
-pop 0 0 r5
-pop 0 0 r4
-pop 0 0 r3
-pop 0 0 r2
 push r1 0 0
-pop 0 0 r7
+pop 0 0 r5
+label exit
+mov exit 0 cnt
+
 label .L_fib
 pop 0 0 r2
-push r2 0 0
-# push 0
-mov 0 0 r0
-push r0 0 0
 # jeq
-pop 0 0 r0
-pop 0 0 r1
-jeq r1 r0 .L2
+jeq r2 r3 .L2
 push r2 0 0
 # push 1
 mov 1 0 r0
@@ -37,9 +26,6 @@ pop 0 0 r0
 pop 0 0 r1
 jeq r1 r0 .L4
 push r2 0 0
-push r3 0 0
-push r4 0 0
-push r5 0 0
 # push .L5
 mov .L5 0 r0
 push r0 0 0
@@ -56,15 +42,9 @@ push r1 0 0
 mov .L_fib 0 cnt
 label .L5
 pop 0 0 r1
-pop 0 0 r5
-pop 0 0 r4
-pop 0 0 r3
 pop 0 0 r2
 push r1 0 0
 push r2 0 0
-push r3 0 0
-push r4 0 0
-push r5 0 0
 # push .L6
 mov .L6 0 r0
 push r0 0 0
@@ -81,9 +61,6 @@ push r1 0 0
 mov .L_fib 0 cnt
 label .L6
 pop 0 0 r1
-pop 0 0 r5
-pop 0 0 r4
-pop 0 0 r3
 pop 0 0 r2
 push r1 0 0
 # add

@@ -177,7 +177,7 @@ class PrintNodeVisitor(ast.NodeVisitor):
         return node
     
     def visit_FunctionDef(self, node: ast.FunctionDef) -> ast.FunctionDef:
-        print(".L_"+node.name)
+        print(".label .L_"+node.name)
         rsize = len(node.args.args) + 1
         for i, arg in enumerate(node.args.args):
             if arg.arg != "r" + str(i + 2):

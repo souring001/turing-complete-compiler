@@ -48,15 +48,23 @@ PMEM = [
     OP_OUT,
 ]
 
-exp = ast.parse("""
+fib = """
 r7 = fib(9)
-
 def fib(r2):
     if r2 != 0:
         if r2 != 1:
             return fib(r2 - 1) + fib(r2 - 2)
     return 1
-""", mode="exec")
+"""
+
+read32 = """
+r5 = 0
+while(r5 != 32):
+    RAM[r5] = r7
+    r5 = r5 + 1
+"""
+
+exp = ast.parse(read32, mode="exec")
 
 class PrintNodeVisitor(ast.NodeVisitor):
     def __init__(self) -> None:
@@ -100,7 +108,19 @@ class PrintNodeVisitor(ast.NodeVisitor):
             print("UNSUPPORTED Name")
         print("OP_PUSH" + node.id[-1])
         return node
-
+    
+    def visit_Subscript(self, node: ast.Subscript) -> ast.Subscript:
+        if not isinstance(node.value, ast.Name):
+                print("UNSUPPORTED Assign 4")
+        if node.value.id != "RAM":
+                print("UNSUPPORTED Assign 5")
+        if not isinstance(node.slice, ast.Name):
+                print("UNSUPPORTED Assign 6")
+        if node.slice.id != "r5":
+                print("UNSUPPORTED Assign 7")
+        print("OP_LOAD")
+        return node
+    
     def visit_If(self, node: ast.If) -> ast.If:
         endlabel = ".L" + str(self.label)
         self.label += 1
@@ -195,12 +215,24 @@ class PrintNodeVisitor(ast.NodeVisitor):
         if len(node.targets) > 1:
             print("UNSUPPORTED Assign 1")
         target = node.targets[0]
-        if not isinstance(target, ast.Name):
-            print("UNSUPPORTED Assign 2")
-        if target.id not in ["r2", "r3", "r4", "r5", "r7"]:
-            print("UNSUPPORTED Assign 3")
-        self.visit(node.value)
-        print("OP_POP" + target.id[-1])
+        if isinstance(target, ast.Name):
+            if target.id not in ["r2", "r3", "r4", "r5", "r7"]:
+                print("UNSUPPORTED Assign 2")
+            self.visit(node.value)
+            print("OP_POP" + target.id[-1])
+        elif isinstance(target, ast.Subscript):
+            if not isinstance(target.value, ast.Name):
+                print("UNSUPPORTED Assign 4")
+            if target.value.id != "RAM":
+                print("UNSUPPORTED Assign 5")
+            if not isinstance(target.slice, ast.Name):
+                print("UNSUPPORTED Assign 6")
+            if target.slice.id != "r5":
+                print("UNSUPPORTED Assign 7")
+            self.visit(node.value)
+            print("OP_STORE")
+        else:
+            print("UNSUPPOPRTED Assign 3")
         return node
     
     def visit_Pass(self, node: ast.Pass) -> ast.Pass:

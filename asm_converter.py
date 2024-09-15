@@ -57,6 +57,14 @@ for command in commands:
     elif command[0] == 'OP_RET':
         print('# ret')
         print('pop 0 0 cnt')
+    elif command[0] == 'OP_STORE':
+        print('# store')
+        print('pop 0 0 r0')
+        print('store r0 0 0')
+    elif command[0] == 'OP_LOAD':
+        print('# load')
+        print('load 0 0 r0')
+        print('push r0 0 0')
     else:
         print('unumplemented!', command)
     

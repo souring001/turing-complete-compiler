@@ -155,15 +155,25 @@ class PrintNodeVisitor(ast.NodeVisitor):
         if not isinstance(node.func, ast.Name):
             print("UNSUPPORTED Call")
         
-        print("op_pusha")
-        print("op_push_ret_addr")
+        returnlabel = ".L" + str(self.label)
+        self.label += 1
+        print("OP_PUSH2")
+        print("OP_PUSH3")
+        print("OP_PUSH4")
+        print("OP_PUSH5")
+        print("OP_PUSH " + returnlabel)
         for arg in node.args:
                self.visit(arg)
         name = node.func.id
         print("OP_CALL .L_" + name)
-        print("op_save_top_to_r1")
-        print("op_popa")
-        print("op_push_r1")
+        print(".label " + returnlabel)
+        # calling convention
+        print("OP_POP1")
+        print("OP_POP5")
+        print("OP_POP4")
+        print("OP_POP3")
+        print("OP_POP2")
+        print("OP_PUSH1")
         return node
     
     def visit_FunctionDef(self, node: ast.FunctionDef) -> ast.FunctionDef:

@@ -1,8 +1,11 @@
 import re
-file_name = 'fib.asm'
+import sys
 
-with open(file_name, 'r') as file:
-    commands = [line.strip().split() for line in file]
+commands = [line.strip().split() for line in sys.stdin]
+
+# file_name = 'fib.asm'
+# with open(file_name, 'r') as file:
+#     commands = [line.strip().split() for line in file]
 
 for command in commands:
     # print(command)

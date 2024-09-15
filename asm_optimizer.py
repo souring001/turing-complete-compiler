@@ -1,8 +1,10 @@
-import re
-file_name = 'asm_leg.asm'
+import sys
 
-with open(file_name, 'r') as file:
-    commands = [line.strip().split() for line in file]
+commands = [line.strip().split() for line in sys.stdin]
+
+# file_name = 'asm_leg.asm'
+# with open(file_name, 'r') as file:
+#     commands = [line.strip().split() for line in file]
 
 def comment_filter(commands):
     new_commands = []
@@ -85,8 +87,6 @@ def match_commands(old_commands, new_commands):
     
     for x, y in zip(old_commands, new_commands):
         return lists_match(x, y)
-
-
 
 filters = [push_pop_filter, nop_filter, dst_match_addi_filter]
 

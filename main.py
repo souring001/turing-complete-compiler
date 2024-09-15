@@ -49,6 +49,13 @@ PMEM = [
 ]
 
 exp = ast.parse("""
+fib(5)
+r2 = r7 # reg2 <- in
+r7 = r2 # out <- reg2
+
+while(0 != 1):
+    pass
+
 def fib(r2):
     if r2 != 0:
         if r2 != 1:
@@ -94,7 +101,7 @@ class PrintNodeVisitor(ast.NodeVisitor):
         return node
     
     def visit_Name(self, node: ast.Name) -> ast.Name:
-        if node.id not in ["r2", "r3", "r4", "r5"]:
+        if node.id not in ["r2", "r3", "r4", "r5", "r7"]:
             print("UNSUPPORTED Name")
         print("OP_PUSH" + node.id[-1])
         return node
@@ -185,7 +192,7 @@ class PrintNodeVisitor(ast.NodeVisitor):
         target = node.targets[0]
         if not isinstance(target, ast.Name):
             print("UNSUPPORTED Assign 2")
-        if target.id not in ["r2", "r3", "r4", "r5"]:
+        if target.id not in ["r2", "r3", "r4", "r5", "r7"]:
             print("UNSUPPORTED Assign 3")
         self.visit(node.value)
         print("OP_POP" + target.id[-1])

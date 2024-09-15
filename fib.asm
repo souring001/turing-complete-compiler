@@ -24,7 +24,7 @@ OP_JEQ .L2
 OP_NOP
 OP_JMP .L1
 .label .L2
-.L_fib
+.label .L_fib
 OP_POP2
 OP_PUSH2
 OP_PUSH 0

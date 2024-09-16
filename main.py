@@ -49,7 +49,7 @@ PMEM = [
 ]
 
 fib = """
-r7 = fib(9)
+r7 = fib(2)
 def fib(r2):
     if r2 != 0:
         if r2 != 1:
@@ -94,7 +94,104 @@ while(r5 != 15):
     r5 = r5 + 1
 """
 
-exp = ast.parse(sort_py, mode="exec")
+fruit_py = """
+r7 = 0
+r7 = 1
+r7 = 0
+r7 = 1
+r7 = 1
+r7 = 1
+r7 = 0
+r7 = 1
+r7 = 2
+r7 = 1
+r7 = 1
+r5 = 0
+r2 = 0
+r3 = 92
+while(r2 != 1):
+    while(r3 == 92):
+        r3 = r7
+        r7 = 3
+    r5 = r3
+    r3 = 92
+    r4 = RAM[r5]
+    if r4 == 1:
+        r2 = 1
+    else:
+        RAM[r5] = 1
+r7 = 2
+r7 = 4
+"""
+
+planet_py = """
+r3 = 1
+while(0 != 1):
+    r2 = r7
+    if r3 == 1:
+        r2 = r2 - 32
+        r7 = r2
+        r3 = 0
+    else:
+        r7 = r2
+    if r2 == 32:
+        r3 = 1
+
+"""
+
+maze_py = """
+maze(0, -1, 3)
+
+def maze(r2, r3, r4):
+    if r4 == 0:
+        return
+
+    r2 = r2 + r3
+    maze(r2, -r3, r4-1)
+    r7 = r2
+
+    r2 = r2 - r3
+    maze(r2, r3, r4-1)
+    r7 = r2
+    maze(r2, r3, r4-1)
+
+    r2 = r2 - r3
+    maze(r2, -r3, r4-1)
+    r7 = r2
+"""
+
+dance_py = """
+r3 = r7
+while(0 == 0):
+    r4 = r3 ^ (r3 >> 1)
+    r5 = r4 ^ (r4 + r4)
+    r3 = r5 ^ (r5 >> 2)
+    r7 = r3 & 0b11
+"""
+
+alloy_py = """
+r2 = r7
+r3 = r7
+r4 = r7
+r5 = r7
+move(r2, r3, r4, r5)
+def move(r2, r3, r4, r5):
+    if r2 == 0:
+        r7 = r3
+        r7 = 5
+        r7 = r4
+        r7 = 5
+    else:
+        move(r2 - 1, r3, r5, r4)
+        r7 = r3
+        r7 = 5
+        r7 = r4
+        r7 = 5
+        move(r2 - 1, r5, r4, r3)
+    return 100
+"""
+
+exp = ast.parse(alloy_py, mode="exec")
 
 class PrintNodeVisitor(ast.NodeVisitor):
     def __init__(self) -> None:
@@ -127,6 +224,14 @@ class PrintNodeVisitor(ast.NodeVisitor):
     
     def visit_BitAnd(self, node: ast.BitAnd) -> ast.BitAnd:
         print("OP_AND")
+        return node
+    
+    def visit_BitXor(self, node: ast.BitXor) -> ast.BitXor:
+        print("OP_XOR")
+        return node
+    
+    def visit_RShift(self, node: ast.RShift) -> ast.RShift:
+        print("OP_SHR")
         return node
     
     def visit_Constant(self, node: ast.Constant) -> ast.Constant:
@@ -165,6 +270,10 @@ class PrintNodeVisitor(ast.NodeVisitor):
                 self.visit(node.test.left)
                 self.visit(node.test.comparators[0])
                 print("OP_JGE ", end="")
+            elif len(node.test.ops) == 1 and isinstance(node.test.ops[0], ast.Eq):
+                self.visit(node.test.left)
+                self.visit(node.test.comparators[0])
+                print("OP_JNE ", end="")
         else:
             print("UNSUPPORTED IF")
         print(elselabel) # jump label
@@ -173,7 +282,8 @@ class PrintNodeVisitor(ast.NodeVisitor):
         print("OP_JMP " + endlabel)
         print(".label " + elselabel)
         if len(node.orelse) > 0:
-            self.visit(node.orelse[0])
+            for stmt in node.orelse:
+                self.visit(stmt)
         print(".label " + endlabel)
         return node
 
@@ -194,6 +304,10 @@ class PrintNodeVisitor(ast.NodeVisitor):
                 self.visit(node.test.left)
                 self.visit(node.test.comparators[0])
                 print("OP_JGE ", end="")
+            elif len(node.test.ops) == 1 and isinstance(node.test.ops[0], ast.Eq):
+                self.visit(node.test.left)
+                self.visit(node.test.comparators[0])
+                print("OP_JNE ", end="")
         else:
             print("UNSUPPORTED While 2")
         print(endlabel) # jump label

@@ -34,6 +34,24 @@ for command in commands:
         print('pop 0 0 r1')
         print('sub r1 r0 r1')
         print('push r1 0 0')
+    elif command[0] == 'OP_AND':
+        print('# and')
+        print('pop 0 0 r0')
+        print('pop 0 0 r1')
+        print('and r1 r0 r1')
+        print('push r1 0 0')
+    elif command[0] == 'OP_XOR':
+        print('# xor')
+        print('pop 0 0 r0')
+        print('pop 0 0 r1')
+        print('xor r1 r0 r1')
+        print('push r1 0 0')
+    elif command[0] == 'OP_SHR':
+        print('# sub')
+        print('pop 0 0 r0')
+        print('pop 0 0 r1')
+        print('shr r1 r0 r1')
+        print('push r1 0 0')
     elif command[0] == 'OP_NOP':
         print('# nop')
         print('addi 0 r0 r0')
@@ -47,6 +65,11 @@ for command in commands:
         print('pop 0 0 r0')
         print('pop 0 0 r1')
         print(f'jeq r1 r0 {command[1]}')
+    elif command[0] == 'OP_JNE':
+        print('# jne')
+        print('pop 0 0 r0')
+        print('pop 0 0 r1')
+        print(f'jne r1 r0 {command[1]}')
     elif command[0] == 'OP_JGE':
         print('# jge')
         print('pop 0 0 r0')

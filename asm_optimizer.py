@@ -182,7 +182,7 @@ filters = [
     push_pop_filter,
     nop_filter,
     dst_match_addi_filter,
-    push_mov_filter,
+    # push_mov_filter,
     src_match_addi_filter,
     src_match_mov_filter,
 ]

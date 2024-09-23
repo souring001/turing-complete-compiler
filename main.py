@@ -190,8 +190,65 @@ def move(r2, r3, r4, r5):
         move(r2 - 1, r5, r4, r3)
     return 100
 """
+# メモリ
+# 0 : 0
+# 1-16: 高さ
+# 17: 0
+# 33-48 (1-16 + 32): 左に存在する壁の高さ情報
+# 65-80 (1-16 + 64): 右に存在する壁の高さ情報
 
-exp = ast.parse(alloy_py, mode="exec")
+# レジスタ
+# r2: 合計水量
+# r5: RAM
+
+# 方針
+# 1. 地面1〜16(i)でループ
+#      高さをメモリに読み込む
+#      左に存在する壁の高さを保持：max(高さ[i-1], 左壁の高さ[i-1])
+# 2. 地面16〜1(i)でループ
+#      右に存在する壁の高さを保持：max(高さ[i+1], 右壁の高さ[i+1])
+#      水量を計算：min(左壁の高さ[i], 右壁の高さ[i]) - 高さ[i]
+#      水量が正ならば合計水量に加算
+# 3. 合計水量を出力
+
+water_py = """
+r5 = 1
+r3 = 0
+while(r5 < 17):
+    RAM[r5] = r7
+    r5 = r5 - 1
+    if r3 < RAM[r5]:
+        r3 = RAM[r5]
+    r5 = r5 + 33
+    RAM[r5] = r3
+    r5 = r5 - 31
+
+r3 = 0
+while(0 < r5):
+    # RAM[r5 + 64] = max(RAM[r5 + 1], RAM[r5 + 1 + 64])
+    r5 = r5 + 1
+    if r3 < RAM[r5]:
+        r3 = RAM[r5]
+    r5 = r5 + 63
+    RAM[r5] = r3 # 右壁の高さ[i]
+
+    # min(左壁の高さ[i], 右壁の高さ[i]) - 高さ[i]
+    r5 = r5 - 32 # i + 32
+    if r3 < RAM[r5]:
+        r4 = r3
+    else:
+        r4 = RAM[r5]
+    r5 = r5 - 32 # i
+    if RAM[r5] < r4:
+        r4 = r4 - RAM[r5]
+        r2 = r2 + r4
+    r5 = r5 - 1 # i--
+
+# 合計水量を出力
+r7 = r2
+"""
+
+exp = ast.parse(water_py, mode="exec")
 
 class PrintNodeVisitor(ast.NodeVisitor):
     def __init__(self) -> None:

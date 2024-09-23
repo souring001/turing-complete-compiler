@@ -3,10 +3,6 @@ import sys
 
 commands = [line.strip().split() for line in sys.stdin]
 
-# file_name = 'fib.asm'
-# with open(file_name, 'r') as file:
-#     commands = [line.strip().split() for line in file]
-
 for command in commands:
     # print(command)
     if command[0] == 'OP_PUSH':
@@ -75,6 +71,11 @@ for command in commands:
         print('pop 0 0 r0')
         print('pop 0 0 r1')
         print(f'jge r1 r0 {command[1]}')
+    elif command[0] == 'OP_JLT':
+        print('# jlt')
+        print('pop 0 0 r0')
+        print('pop 0 0 r1')
+        print(f'jlt r1 r0 {command[1]}')
     elif command[0] == 'OP_CALL':
         print('# call')
         print(f'mov {command[1]} 0 cnt')

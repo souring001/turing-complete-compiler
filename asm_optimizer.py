@@ -2,10 +2,6 @@ import sys
 
 commands = [line.strip().split() for line in sys.stdin]
 
-# file_name = 'asm_leg.asm'
-# with open(file_name, 'r') as file:
-#     commands = [line.strip().split() for line in file]
-
 def comment_filter(commands):
     new_commands = []
 
@@ -94,7 +90,7 @@ def src_match_addi_filter(commands):
         opecode = command[0]
         if opecode == 'addi':
             next_command = commands[i+1]
-            if next_command[0] in ['add', 'addi', 'sub', 'subi2', 'and', 'xor', 'shr', 'shri2', 'store', 'push', 'jeq', 'jne', 'jge'] and (next_command[1] == command[3] or next_command[2] == command[3]):
+            if next_command[0] in ['add', 'addi', 'sub', 'subi2', 'and', 'xor', 'shr', 'shri2', 'store', 'push', 'jeq', 'jne', 'jge', 'jlt'] and (next_command[1] == command[3] or next_command[2] == command[3]):
                 src1 = next_command[1]
                 src2 = next_command[2]
                 if next_command[1] == command[3]:
@@ -182,7 +178,7 @@ filters = [
     push_pop_filter,
     nop_filter,
     dst_match_addi_filter,
-    # push_mov_filter,
+    push_mov_filter,
     src_match_addi_filter,
     src_match_mov_filter,
 ]

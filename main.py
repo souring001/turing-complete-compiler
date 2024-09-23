@@ -274,6 +274,10 @@ class PrintNodeVisitor(ast.NodeVisitor):
                 self.visit(node.test.left)
                 self.visit(node.test.comparators[0])
                 print("OP_JNE ", end="")
+            elif len(node.test.ops) == 1 and isinstance(node.test.ops[0], ast.GtE):
+                self.visit(node.test.left)
+                self.visit(node.test.comparators[0])
+                print("OP_JLT ", end="")
         else:
             print("UNSUPPORTED IF")
         print(elselabel) # jump label
